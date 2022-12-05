@@ -4,6 +4,7 @@ import me.zodd.strax.modules.ban.BanConfig
 import me.zodd.strax.modules.chat.ChatConfig
 import me.zodd.strax.modules.connection.ConnectionConfig
 import me.zodd.strax.modules.kick.KickConfig
+import me.zodd.strax.modules.nickname.NicknameConfig
 import org.spongepowered.configurate.objectmapping.ConfigSerializable
 
 @ConfigSerializable
@@ -17,4 +18,5 @@ data class Modules(
     val chatConfig : ChatConfig = ChatConfig(),
     val kickConfig: KickConfig = KickConfig(),
     val connectionConfig : ConnectionConfig = ConnectionConfig(),
+    val nicknameConfig : NicknameConfig = NicknameConfig(),
 )
