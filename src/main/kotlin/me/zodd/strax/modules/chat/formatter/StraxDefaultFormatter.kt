@@ -16,7 +16,7 @@ class StraxDefaultFormatter(subject: Subject) : StraxFormatter(subject) {
 
         val name = player.displayName().get()
 
-        val endResult = Component.text()
+        val result = Component.text()
             .append(mm.deserialize(options.prefix))
             .append(name)
             .append(Component.space())
@@ -25,6 +25,6 @@ class StraxDefaultFormatter(subject: Subject) : StraxFormatter(subject) {
             .append(message)
             .build()
 
-        return Optional.of(endResult)
+        return Optional.of(result)
     }
 }

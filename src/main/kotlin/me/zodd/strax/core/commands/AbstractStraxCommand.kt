@@ -1,10 +1,11 @@
 package me.zodd.strax.core.commands
 
+import me.zodd.strax.core.StraxDeserializer
 import me.zodd.strax.core.service.StraxCommandService
 import me.zodd.strax.core.utils.StraxConfigurationReference
 import org.spongepowered.api.command.Command
 
-abstract class AbstractStraxCommand : StraxCommandService() {
+abstract class AbstractStraxCommand : StraxCommandService(), StraxDeserializer {
     val config = StraxConfigurationReference.straxConfig
 }
 

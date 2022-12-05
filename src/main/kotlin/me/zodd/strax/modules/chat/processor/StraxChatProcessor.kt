@@ -1,21 +1,15 @@
 package me.zodd.strax.modules.chat.processor
 
 import me.zodd.strax.core.PermissionOptions
-import me.zodd.strax.core.utils.StraxMiniMessage
+import me.zodd.strax.core.StraxDeserializer
 import net.kyori.adventure.text.Component
-import net.kyori.adventure.text.minimessage.MiniMessage
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver
 import net.kyori.adventure.text.minimessage.tag.standard.StandardTags
-import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer
 import org.spongepowered.api.entity.living.player.server.ServerPlayer
 import kotlin.reflect.full.createType
 import kotlin.reflect.full.isSubtypeOf
 
-object StraxChatProcessor {
-    private val mmBuilder = MiniMessage.builder()
-
-    private val plaintextSerializer = PlainTextComponentSerializer.plainText()
-
+object StraxChatProcessor : StraxDeserializer {
     private val permissionResolverMap: Map<String, TagResolver> = StandardTags::class.members
         .asSequence()
         .filter { it.returnType.isSubtypeOf(TagResolver::class.createType()) }
@@ -41,12 +35,10 @@ object StraxChatProcessor {
         }
 
         //When deserializing a string without literal text it won't properly store a Components style
-        val randomString = "Oranges"
+        val defaultChatStyle = minimessage.deserialize("${chatOptions}oranges").style()
 
-        val defaultChatStyle = StraxMiniMessage.mm.deserialize("$chatOptions$randomString").style()
+        val mm = minimessageBuilder.tags(resolver.build()).build()
 
-        val miniMessage = mmBuilder.tags(resolver.build()).build()
-
-        return miniMessage.deserialize(str).applyFallbackStyle(defaultChatStyle)
+        return mm.deserialize(str).applyFallbackStyle(defaultChatStyle)
     }
 }
