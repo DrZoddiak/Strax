@@ -3,6 +3,7 @@ package me.zodd.strax
 import com.google.inject.Inject;
 import me.zodd.strax.core.service.StraxCommandService
 import me.zodd.strax.core.service.StraxListenerService
+import me.zodd.strax.core.storage.StraxStorage
 import me.zodd.strax.core.utils.StraxConfigurationReference
 import me.zodd.strax.modules.core.CoreConfig
 import org.apache.logging.log4j.Logger;
@@ -45,6 +46,9 @@ class Strax @Inject internal constructor(
             Sponge.eventManager().registerListeners(container, it)
         }
 
+        val db = StraxStorage.db
+
+        logger.info("location : $db")
     }
 
     @Listener
@@ -68,9 +72,9 @@ class Strax @Inject internal constructor(
                 val firstAlias = cmd.value[0]
                 val remainingAliases = cmd.value.filterNot { it.contentEquals(firstAlias) }.toTypedArray()
                 if (remainingAliases.isEmpty()) {
-                    event.register(container, cmd.key, cmd.value[0])
+                    event.register(container, cmd.key, firstAlias)
                 } else {
-                    event.register(container, cmd.key, cmd.value[0], *remainingAliases)
+                    event.register(container, cmd.key, firstAlias, *remainingAliases)
                 }
             }
         }

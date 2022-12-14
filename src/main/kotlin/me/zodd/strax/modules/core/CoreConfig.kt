@@ -20,3 +20,11 @@ data class Modules(
     val connectionConfig : ConnectionConfig = ConnectionConfig(),
     val nicknameConfig : NicknameConfig = NicknameConfig(),
 )
+
+@ConfigSerializable
+data class StorageDetails(
+    val url : String = "",
+    val driver : String = "",
+    val user : String = "",
+    val password : String = "",
+)

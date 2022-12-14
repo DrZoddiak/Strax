@@ -1,10 +1,12 @@
+import com.github.jengelman.gradle.plugins.shadow.tasks.ConfigureShadowRelocation
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.spongepowered.gradle.plugin.config.PluginLoaders
 import org.spongepowered.plugin.metadata.model.PluginDependency
 
 plugins {
     kotlin("jvm") version "1.7.20"
-    id ("com.github.johnrengelman.shadow") version "7.1.2"
+    id("com.github.johnrengelman.shadow") version "7.1.2"
     id("com.google.devtools.ksp") version "1.7.20-1.0.8"
     id("org.spongepowered.gradle.plugin") version "2.1.1"
 }
@@ -16,14 +18,30 @@ repositories {
     mavenCentral()
 }
 
+val exposedVersion: String = "0.40.1"
+val adventureVersion: String = "4.12.0"
+
 dependencies {
+    //annotations
     ksp("dev.zacsweers.autoservice:auto-service-ksp:1.0.0")
     implementation("com.google.auto.service:auto-service-annotations:1.0.1")
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-    implementation("net.kyori:adventure-text-minimessage:4.11.0")
-    implementation("net.kyori:adventure-text-serializer-plain:4.11.0")
+
+    //Chat formatting
+    implementation("net.kyori:adventure-text-minimessage:$adventureVersion")
+    implementation("net.kyori:adventure-text-serializer-plain:$adventureVersion")
+
+    //Kotlin
+    implementation(kotlin("stdlib-jdk8"))
     implementation(kotlin("reflect"))
+
+    //Configuration
     implementation("org.spongepowered:configurate-extra-kotlin:4.1.2")
+
+    //Storage
+    implementation("com.h2database:h2:2.1.214")
+    implementation("org.jetbrains.exposed:exposed-core:$exposedVersion")
+    implementation("org.jetbrains.exposed:exposed-dao:$exposedVersion")
+    implementation("org.jetbrains.exposed:exposed-jdbc:$exposedVersion")
 }
 
 
@@ -52,7 +70,6 @@ sponge {
         }
     }
 }
-
 
 tasks.withType<KotlinCompile> {
     kotlinOptions.jvmTarget = "1.8"

@@ -5,10 +5,7 @@ import me.zodd.strax.core.PermissionOptions
 import me.zodd.strax.core.service.StraxListenerService
 import me.zodd.strax.modules.chat.formatter.StraxDefaultFormatter
 import me.zodd.strax.modules.chat.processor.StraxChatProcessor
-import net.kyori.adventure.text.Component
-import net.kyori.adventure.text.format.Style
 import net.kyori.adventure.text.minimessage.MiniMessage
-import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder
 import org.spongepowered.api.entity.living.player.server.ServerPlayer
 import org.spongepowered.api.event.Listener
 import org.spongepowered.api.event.Order

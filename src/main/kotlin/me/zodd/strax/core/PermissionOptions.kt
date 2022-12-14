@@ -8,6 +8,7 @@ object PermissionOptions {
             "chatcolor",
             "chatstyle",
         )
+
         class ChatFormatOptions(subject: Subject) {
             val prefix = subject.optionOrEmpty("prefix")
             val suffix = subject.optionOrEmpty("suffix")
@@ -15,6 +16,6 @@ object PermissionOptions {
             val namestyle = subject.optionOrEmpty("namestyle")
         }
     }
-}
 
-fun Subject.optionOrEmpty(key : String): String = option(key).orElse("")
+    fun Subject.optionOrEmpty(key: String): String = option(key).orElse("")
+}
