@@ -42,6 +42,15 @@ dependencies {
     implementation("org.jetbrains.exposed:exposed-core:$exposedVersion")
     implementation("org.jetbrains.exposed:exposed-dao:$exposedVersion")
     implementation("org.jetbrains.exposed:exposed-jdbc:$exposedVersion")
+
+    //tests
+    testImplementation(kotlin("test"))
+}
+
+tasks {
+    test {
+        useTestNG()
+    }
 }
 
 
