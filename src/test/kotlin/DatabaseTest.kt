@@ -1,5 +1,4 @@
 import me.zodd.strax.core.service.StraxStorageService
-import me.zodd.strax.core.storage.StraxStorage
 import me.zodd.strax.core.storage.UserDatabase
 import me.zodd.strax.modules.nickname.NicknameStorage
 import net.kyori.adventure.text.minimessage.MiniMessage
@@ -8,7 +7,6 @@ import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.StdOutSqlLogger
 import org.jetbrains.exposed.sql.addLogger
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.testng.annotations.AfterMethod
 import java.util.*
 import java.util.concurrent.ThreadLocalRandom
 import kotlin.random.Random
@@ -26,8 +24,6 @@ class DatabaseTest {
             ServiceLoader.load(StraxStorageService::class.java).forEach {
                 SchemaUtils.create(it.table)
             }
-
-            this
         }
     }
 
@@ -69,6 +65,10 @@ class DatabaseTest {
     }
 
 
+    /*
+    *   This generates a random sequence of letters
+    *   It then replaces any 'z' chars with a random color format
+    */
     private fun randomName(): String {
         val charPool: List<Char> = ('a'..'z') + ('A'..'Z')
 
@@ -82,10 +82,7 @@ class DatabaseTest {
             "<white>",
         )
 
-        /*
-        *   This generates a random sequence of letters
-        *   It then replaces any 'z' chars with a random color format
-         */
+
         return ThreadLocalRandom.current()
             .ints(Random.nextLong(3, 64), 0, charPool.size)
             .asSequence()

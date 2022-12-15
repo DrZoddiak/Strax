@@ -7,6 +7,8 @@ import org.spongepowered.api.service.permission.Subject
 import java.util.*
 
 class StraxDefaultFormatter(subject: Subject) : StraxFormatter(subject) {
+
+    private val configPrefix = config.modules.nicknameConfig.nicknamePrefix
     override fun format(
         player: ServerPlayer,
         target: Audience,
@@ -14,7 +16,11 @@ class StraxDefaultFormatter(subject: Subject) : StraxFormatter(subject) {
         originalMessage: Component
     ): Optional<Component> {
 
-        val name = player.displayName().get()
+        val name = if (player.customName().isPresent) {
+            Component.text(configPrefix + player.customName().get())
+        } else {
+            player.displayName().get()
+        }
 
         val result = Component.text()
             .append(mm.deserialize(options.prefix))

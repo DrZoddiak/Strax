@@ -38,7 +38,7 @@ class Strax @Inject internal constructor(
     fun onConstructPlugin(event: ConstructPluginEvent) {
         // Perform any one-time setup
         logger = event.plugin().logger()
-        logger.info("Constructing example plugin")
+        logger.info("Constructing Strax")
 
         loadConfig()
 
@@ -46,9 +46,8 @@ class Strax @Inject internal constructor(
             Sponge.eventManager().registerListeners(container, it)
         }
 
-        val db = StraxStorage.db
-
-        logger.info("location : $db")
+        //Initialize Database
+        StraxStorage.db
     }
 
     @Listener
@@ -84,6 +83,7 @@ class Strax @Inject internal constructor(
         logger.info("loading configuration file...")
         val conf = reference.referenceTo(CoreConfig::class.java)
         reference.runCatching { save() }
-        StraxConfigurationReference.straxConfig = conf.get() ?: throw ConfigurateException("Deserialization failure")
+        val config = conf.get() ?: throw ConfigurateException("Deserialization failure")
+        StraxConfigurationReference.straxConfig = config
     }
 }

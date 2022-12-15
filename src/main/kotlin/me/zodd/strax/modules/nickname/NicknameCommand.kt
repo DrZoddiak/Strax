@@ -9,6 +9,7 @@ import net.kyori.adventure.audience.Audience
 import net.kyori.adventure.text.Component
 import org.spongepowered.api.Sponge
 import org.spongepowered.api.command.CommandResult
+import org.spongepowered.api.command.parameter.CommandContext
 import org.spongepowered.api.command.parameter.CommonParameters
 import org.spongepowered.api.data.Keys
 import org.spongepowered.api.entity.living.player.server.ServerPlayer
@@ -26,10 +27,7 @@ class NicknameCommand : AbstractStraxCommand() {
         addParameters(
             CommonParameters.PLAYER_OPTIONAL, CommonParameters.MESSAGE
         )
-        permission(NicknamePermissions.nicknameBase)
         executor { ctx ->
-
-            val root = ctx.cause().root() as Subject
 
             val nickname = ctx.requireOne(CommonParameters.MESSAGE)
 
@@ -37,18 +35,9 @@ class NicknameCommand : AbstractStraxCommand() {
                 return@executor CommandResult.error(Component.text("Invalid nickname"))
             }
 
-            val targetPlayer =
-                if (root.hasPermission(NicknamePermissions.nickTargetOthers) && ctx.hasAny(CommonParameters.PLAYER_OPTIONAL)) {
-                    ctx.requireOne(CommonParameters.PLAYER_OPTIONAL)
-                } else {
-                    if (ctx.cause().root() is ServerPlayer) {
-                        ctx.cause().root() as ServerPlayer
-                    } else {
-                        return@executor CommandResult.error(
-                            Component.text("Command must be run by a player or target another player!")
-                        )
-                    }
-                }
+            val targetPlayer = targetPlayer(ctx) ?: return@executor CommandResult.error(
+                Component.text("Command must be run by a player or target another player!")
+            )
 
             NicknameStorage(targetPlayer.uniqueId()).updateNick(nickname)
             targetPlayer.offer(Keys.CUSTOM_NAME, minimessage.deserialize(nickname))
@@ -57,28 +46,17 @@ class NicknameCommand : AbstractStraxCommand() {
         }
     }
 
+
     private val delnick = StraxCommand("delnick").builder { cmd ->
         shortDescription(Component.text("Remove a nickname from a player"))
         addParameters(
             CommonParameters.PLAYER_OPTIONAL
         )
-        permission(NicknamePermissions.nicknameBase)
         executor { ctx ->
 
-            val root = ctx.cause().root() as Subject
-
-            val targetPlayer =
-                if (root.hasPermission(NicknamePermissions.nickTargetOthers) && ctx.hasAny(CommonParameters.PLAYER_OPTIONAL)) {
-                    ctx.requireOne(CommonParameters.PLAYER_OPTIONAL)
-                } else {
-                    if (ctx.cause().root() is ServerPlayer) {
-                        ctx.cause().root() as ServerPlayer
-                    } else {
-                        return@executor CommandResult.error(
-                            Component.text("Command must be run by a player or target another player!")
-                        )
-                    }
-                }
+            val targetPlayer = targetPlayer(ctx) ?: return@executor CommandResult.error(
+                Component.text("Command must be run by a player or target another player!")
+            )
 
             NicknameStorage(targetPlayer.uniqueId()).updateNick("")
             targetPlayer.remove(Keys.CUSTOM_NAME)
@@ -89,11 +67,10 @@ class NicknameCommand : AbstractStraxCommand() {
 
     @OptIn(ExperimentalStdlibApi::class)
     private val realname = StraxCommand("realname").builder { cmd ->
-        shortDescription(Component.text("Find the realname of a player"))
+        shortDescription(Component.text("Find the real name of a player"))
         addParameters(
             CommonParameters.MESSAGE
         )
-        permission(NicknamePermissions.realnameBase)
         executor { ctx ->
 
             val root = ctx.cause().root() as Audience
@@ -105,11 +82,27 @@ class NicknameCommand : AbstractStraxCommand() {
             }.firstOrNull()?.user?.first()?.userId
 
             val player = Sponge.server().player(uuid).getOrNull()
-            val name = player?.name() ?: "unknown"
+
+            val name = player?.name() ?: return@executor CommandResult.error(
+                Component.text("No player by that name was found!")
+            )
 
             root.sendMessage(Component.text("The players real name is $name"))
 
             CommandResult.success()
+        }
+    }
+
+    private fun targetPlayer(ctx: CommandContext): ServerPlayer? {
+        val root = ctx.cause().root() as Subject
+        return if (root.hasPermission(NicknamePermissions.nickTargetOthers) && ctx.hasAny(CommonParameters.PLAYER_OPTIONAL)) {
+            ctx.requireOne(CommonParameters.PLAYER_OPTIONAL)
+        } else {
+            if (ctx.cause().root() is ServerPlayer) {
+                ctx.cause().root() as ServerPlayer
+            } else {
+                null
+            }
         }
     }
 

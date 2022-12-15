@@ -15,7 +15,6 @@ class CoreCommand : AbstractStraxCommand() {
 
     private val straxBaseCommand = StraxCommand("strax").builder { cmd ->
         shortDescription(Component.text("Base command for the Strax plugin"))
-        permission("${cmd.permission}.base")
         executor { context ->
             return@executor CommandResult.success()
         }

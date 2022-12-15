@@ -20,7 +20,7 @@ import java.util.*
 @AutoService(StraxListenerService::class)
 class ConnectionListener : StraxListenerService() {
 
-    private val connectionConfig = config.connectionConfig
+    private val connectionConfig = config.modules.connectionConfig
 
     @Listener(order = Order.FIRST)
     @IsCancelled(Tristate.TRUE)
