@@ -1,4 +1,4 @@
-package me.zodd.strax.core.storage
+package me.zodd.strax.core.storage.database
 
 import com.google.auto.service.AutoService
 import me.zodd.strax.core.service.StraxStorageService
@@ -16,7 +16,7 @@ class UserDatabase : StraxStorageService(Users) {
         val nickname = reference(
             "nickname",
             NicknameDatabase.Nicknames,
-            onUpdate = ReferenceOption.CASCADE
+            ReferenceOption.CASCADE
         )
     }
 

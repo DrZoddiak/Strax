@@ -6,6 +6,7 @@ import org.spongepowered.plugin.metadata.model.PluginDependency
 
 plugins {
     kotlin("jvm") version "1.7.20"
+    kotlin("plugin.serialization") version "1.7.20"
     id("com.github.johnrengelman.shadow") version "7.1.2"
     id("com.google.devtools.ksp") version "1.7.20-1.0.8"
     id("org.spongepowered.gradle.plugin") version "2.1.1"
@@ -42,6 +43,7 @@ dependencies {
     implementation("org.jetbrains.exposed:exposed-core:$exposedVersion")
     implementation("org.jetbrains.exposed:exposed-dao:$exposedVersion")
     implementation("org.jetbrains.exposed:exposed-jdbc:$exposedVersion")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.1")
 
     //tests
     testImplementation(kotlin("test"))

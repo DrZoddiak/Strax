@@ -1,6 +1,5 @@
 package me.zodd.strax.core.commands
 
-import me.zodd.strax.core.StraxDeserializer
 import me.zodd.strax.core.service.StraxCommandService
 import org.spongepowered.api.command.Command
 import org.spongepowered.api.command.parameter.CommandContext
@@ -8,8 +7,7 @@ import org.spongepowered.api.command.parameter.CommonParameters
 import org.spongepowered.api.entity.living.player.server.ServerPlayer
 import org.spongepowered.api.service.permission.Subject
 
-abstract class AbstractStraxCommand : StraxCommandService(), StraxDeserializer {
-}
+abstract class AbstractStraxCommand : StraxCommandService()
 
 data class StraxCommand(
     val name: String,

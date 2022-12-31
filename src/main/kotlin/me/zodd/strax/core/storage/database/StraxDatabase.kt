@@ -1,4 +1,4 @@
-package me.zodd.strax.core.storage
+package me.zodd.strax.core.storage.database
 
 import me.zodd.strax.core.service.StraxStorageService
 import me.zodd.strax.core.utils.StraxConfigurationReference

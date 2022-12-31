@@ -1,4 +1,4 @@
-package me.zodd.strax.core.storage
+package me.zodd.strax.core.storage.database
 
 import me.zodd.strax.modules.core.StraxUserStorage
 import java.util.UUID

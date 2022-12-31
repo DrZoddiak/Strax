@@ -12,7 +12,9 @@ import org.spongepowered.api.event.filter.cause.Root
 import org.spongepowered.api.event.network.ServerSideConnectionEvent
 
 @AutoService(StraxListenerService::class)
-class NicknameListener : StraxListenerService(), StraxDeserializer {
+class NicknameListener : StraxListenerService() {
+
+    private val deserializer = StraxDeserializer
 
     @Listener
     fun playerJoinEvent(event: ServerSideConnectionEvent.Join, @Root player: ServerPlayer) {
@@ -22,7 +24,7 @@ class NicknameListener : StraxListenerService(), StraxDeserializer {
 
         if (nick.isBlank()) return
 
-        player.offer(Keys.CUSTOM_NAME, minimessage.deserialize(nick))
+        player.offer(Keys.CUSTOM_NAME, deserializer.minimessage.deserialize(nick))
     }
 
 }

@@ -3,16 +3,14 @@ package me.zodd.strax
 import com.google.inject.Inject;
 import me.zodd.strax.core.service.StraxCommandService
 import me.zodd.strax.core.service.StraxListenerService
-import me.zodd.strax.core.storage.StraxStorage
+import me.zodd.strax.core.storage.database.StraxStorage
 import me.zodd.strax.core.utils.StraxConfigurationReference
 import me.zodd.strax.modules.core.CoreConfig
 import org.apache.logging.log4j.Logger;
-import org.spongepowered.api.Engine
 import org.spongepowered.api.Server;
 import org.spongepowered.api.Sponge
 import org.spongepowered.api.command.Command;
 import org.spongepowered.api.config.DefaultConfig
-import org.spongepowered.api.event.EventListenerRegistration
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.lifecycle.ConstructPluginEvent;
 import org.spongepowered.api.event.lifecycle.RegisterCommandEvent;

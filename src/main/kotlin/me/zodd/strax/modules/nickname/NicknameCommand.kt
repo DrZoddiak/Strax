@@ -1,10 +1,11 @@
 package me.zodd.strax.modules.nickname
 
 import com.google.auto.service.AutoService
+import me.zodd.strax.core.StraxDeserializer
 import me.zodd.strax.core.commands.AbstractStraxCommand
 import me.zodd.strax.core.commands.StraxCommand
 import me.zodd.strax.core.service.StraxCommandService
-import me.zodd.strax.core.storage.NicknameDatabase
+import me.zodd.strax.core.storage.database.NicknameDatabase
 import net.kyori.adventure.audience.Audience
 import net.kyori.adventure.text.Component
 import org.spongepowered.api.Sponge
@@ -19,6 +20,8 @@ import kotlin.jvm.optionals.getOrNull
 
 @AutoService(StraxCommandService::class)
 class NicknameCommand : AbstractStraxCommand() {
+
+    private val deserializer = StraxDeserializer
 
     private val nicknameConfig = config.modules.nicknameConfig
 
@@ -40,7 +43,7 @@ class NicknameCommand : AbstractStraxCommand() {
             )
 
             NicknameStorage(targetPlayer.uniqueId()).updateNick(nickname)
-            targetPlayer.offer(Keys.CUSTOM_NAME, minimessage.deserialize(nickname))
+            targetPlayer.offer(Keys.CUSTOM_NAME, deserializer.minimessage.deserialize(nickname))
 
             CommandResult.success()
         }

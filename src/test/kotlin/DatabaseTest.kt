@@ -1,5 +1,5 @@
 import me.zodd.strax.core.service.StraxStorageService
-import me.zodd.strax.core.storage.UserDatabase
+import me.zodd.strax.core.storage.database.UserDatabase
 import me.zodd.strax.modules.nickname.NicknameStorage
 import net.kyori.adventure.text.minimessage.MiniMessage
 import org.jetbrains.exposed.sql.Database
