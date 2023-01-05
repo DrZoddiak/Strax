@@ -18,7 +18,7 @@ class FlyCommand : AbstractStraxCommand() {
             CommonParameters.PLAYER_OPTIONAL
         )
         executor { ctx ->
-            val targetPlayer = cmd.targetPlayer(ctx) ?: return@executor CommandResult.error(
+            val targetPlayer = cmd.targetPlayerOrRoot(ctx) ?: return@executor CommandResult.error(
                 Component.text("Command must be run by a player or target another player!")
             )
 

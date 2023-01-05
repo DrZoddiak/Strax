@@ -1,15 +1,25 @@
 package me.zodd.strax.modules.nickname
 
-import me.zodd.strax.core.StraxDeserializer
-import me.zodd.strax.core.storage.database.AbstractStraxStorage
-import org.jetbrains.exposed.sql.transactions.transaction
+import me.zodd.strax.core.storage.AbstractModuleStorage
+import me.zodd.strax.core.storage.StorageSerializable
+import net.kyori.adventure.text.minimessage.MiniMessage
 import java.util.UUID
 
-class NicknameStorage(uuid: UUID) : AbstractStraxStorage(uuid) {
-    fun updateNick(nickname: String) = transaction {
-        val ref = userStorage.getOrCreateUser().nickRef
-        ref.formattedNickname = nickname
-        ref.literalNickname = StraxDeserializer.minimessage.stripTags(nickname)
-        ref
+class NicknameStorage(id: UUID) : AbstractModuleStorage<Nickname>(id) {
+
+    override val moduleData get() = getUserData().nickname
+    fun update(nickname: String) = update(Nickname(nickname))
+
+    override fun update(data: Nickname) {
+        val copy = getUserData().copy(nickname = data)
+        updateData(copy)
+    }
+}
+
+data class Nickname(val formattedName: String = "") : StorageSerializable {
+    val literalName = MiniMessage.miniMessage().stripTags(formattedName)
+
+    override fun toString(): String {
+        return "Nickname(formattedName=$formattedName,literalName=$literalName)"
     }
 }
