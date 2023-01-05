@@ -5,6 +5,7 @@ import me.zodd.strax.modules.chat.ChatConfig
 import me.zodd.strax.modules.connection.ConnectionConfig
 import me.zodd.strax.modules.fly.FlyConfig
 import me.zodd.strax.modules.kick.KickConfig
+import me.zodd.strax.modules.nameban.NamebanConfig
 import me.zodd.strax.modules.nickname.NicknameConfig
 import org.spongepowered.configurate.objectmapping.ConfigSerializable
 
@@ -22,6 +23,8 @@ data class Modules(
     val connectionConfig: ConnectionConfig = ConnectionConfig(),
     val nicknameConfig: NicknameConfig = NicknameConfig(),
     val flyConfig: FlyConfig = FlyConfig(),
+    val namebanConfig : NamebanConfig = NamebanConfig(),
+
 )
 
 @ConfigSerializable

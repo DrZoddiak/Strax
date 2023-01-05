@@ -10,14 +10,14 @@ import org.bson.UuidRepresentation
 import org.litote.kmongo.*
 import org.litote.kmongo.util.KMongoJacksonFeature
 import org.litote.kmongo.util.UpdateConfiguration
-import java.util.*
+import java.net.URLEncoder
 
 object StraxStorage {
 
     private val conf = StraxConfigurationReference.straxConfig.storage
 
-    private val username = conf.user
-    private val password = conf.password
+    private val username = URLEncoder.encode(conf.user, "UTF-8")
+    private val password = URLEncoder.encode(conf.password, "UTF-8")
     private val url = conf.url
 
     private val connectionString =
@@ -35,29 +35,4 @@ object StraxStorage {
     }
 }
 
-fun main() {
-    val userID = UUID.fromString("78218344-5800-456e-800f-19b1d62769e1")
-
-    val nickStore = NicknameStorage(userID)
-
-    println("nick : ${nickStore.moduleData}")
-
-    nickStore.update("<blue>Safety<yellow>Human")
-
-    println("nick : ${nickStore.moduleData}")
-
-    nickStore.update("<red>Safety<green>Human")
-
-    println("nick : ${nickStore.moduleData}")
-
-}
-
-
-
-
 class StraxStorageException(msg: String) : MongoException(msg)
-
-
-//USER : drzodd
-//PASS: HHx3kt7hgX2WeM5
-
