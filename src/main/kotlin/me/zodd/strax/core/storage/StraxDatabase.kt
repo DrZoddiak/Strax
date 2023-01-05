@@ -4,7 +4,7 @@ import com.mongodb.ConnectionString
 import com.mongodb.MongoClientSettings
 import com.mongodb.MongoException
 import com.mongodb.client.MongoDatabase
-import me.zodd.strax.modules.core.User
+import me.zodd.strax.core.utils.StraxConfigurationReference
 import me.zodd.strax.modules.nickname.NicknameStorage
 import org.bson.UuidRepresentation
 import org.litote.kmongo.*
@@ -14,11 +14,14 @@ import java.util.*
 
 object StraxStorage {
 
-    val username = "drzodd"
-    val password = "HHx3kt7hgX2WeM5"
+    private val conf = StraxConfigurationReference.straxConfig.storage
+
+    private val username = conf.user
+    private val password = conf.password
+    private val url = conf.url
 
     private val connectionString =
-        ConnectionString("mongodb+srv://$username:$password@cluster0.jni3ihp.mongodb.net/?retryWrites=false&w=majority")
+        ConnectionString("mongodb+srv://$username:$password@$url")
 
     private val settings = MongoClientSettings.builder()
         .uuidRepresentation(UuidRepresentation.STANDARD)
