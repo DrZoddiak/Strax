@@ -10,7 +10,7 @@ data class NicknameConfig(
     val nicknameMinSize: Int = 3,
     val nicknameRegex: String = "[a-zA-Z0-9_]+",
     val nicknamePrefix: String = "<blue>~",
-) : StraxDeserializer {
+) {
 
     fun validNickname(nickname: String): Boolean {
         Strax.logger.info("Checking Nickname Validity")
@@ -33,6 +33,6 @@ data class NicknameConfig(
     }
 
     private fun stripTags(nickname: String): String {
-        return minimessage.stripTags(nickname)
+        return StraxDeserializer.minimessage.stripTags(nickname)
     }
 }

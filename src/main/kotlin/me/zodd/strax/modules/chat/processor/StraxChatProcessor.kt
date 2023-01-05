@@ -9,7 +9,10 @@ import org.spongepowered.api.entity.living.player.server.ServerPlayer
 import kotlin.reflect.full.createType
 import kotlin.reflect.full.isSubtypeOf
 
-object StraxChatProcessor : StraxDeserializer {
+object StraxChatProcessor {
+
+    private val deserializer = StraxDeserializer
+
     private val permissionResolverMap: Map<String, TagResolver> = StandardTags::class.members
         .asSequence()
         .filter { it.returnType.isSubtypeOf(TagResolver::class.createType()) }
@@ -21,7 +24,7 @@ object StraxChatProcessor : StraxDeserializer {
         }.toMap()
 
     fun parseContent(player: ServerPlayer, content: Component): Component {
-        val str = plaintextSerializer.serialize(content)
+        val str = deserializer.plaintextSerializer.serialize(content)
         val resolver = TagResolver.builder()
 
         permissionResolverMap.filter {
@@ -35,9 +38,9 @@ object StraxChatProcessor : StraxDeserializer {
         }
 
         //When deserializing a string without literal text it won't properly store a Components style
-        val defaultChatStyle = minimessage.deserialize("${chatOptions}oranges").style()
+        val defaultChatStyle = deserializer.minimessage.deserialize("${chatOptions}oranges").style()
 
-        val mm = minimessageBuilder.tags(resolver.build()).build()
+        val mm = deserializer.minimessageBuilder.tags(resolver.build()).build()
 
         return mm.deserialize(str).applyFallbackStyle(defaultChatStyle)
     }

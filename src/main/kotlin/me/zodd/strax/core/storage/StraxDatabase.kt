@@ -1,26 +1,63 @@
 package me.zodd.strax.core.storage
 
-import me.zodd.strax.core.service.StraxStorageService
+import com.mongodb.ConnectionString
+import com.mongodb.MongoClientSettings
+import com.mongodb.MongoException
+import com.mongodb.client.MongoDatabase
 import me.zodd.strax.core.utils.StraxConfigurationReference
-import org.jetbrains.exposed.sql.*
-import org.jetbrains.exposed.sql.transactions.transaction
+import me.zodd.strax.modules.nickname.NicknameStorage
+import org.bson.UuidRepresentation
+import org.litote.kmongo.*
+import org.litote.kmongo.util.KMongoJacksonFeature
+import org.litote.kmongo.util.UpdateConfiguration
 import java.util.*
 
 object StraxStorage {
-    val db by lazy {
-        val config = StraxConfigurationReference.straxConfig.storage
 
-        val url = config.url.ifEmpty { "Strax/strax" }
+    private val conf = StraxConfigurationReference.straxConfig.storage
 
-        val conn = Database.connect("jdbc:h2:./$url", "org.h2.Driver", config.user, config.password)
+    private val username = conf.user
+    private val password = conf.password
+    private val url = conf.url
 
-        transaction {
-            ServiceLoader.load(StraxStorageService::class.java).forEach {
-                SchemaUtils.create(it.table)
-            }
-            conn
-        }
+    private val connectionString =
+        ConnectionString("mongodb+srv://$username:$password@$url")
+
+    private val settings = MongoClientSettings.builder()
+        .uuidRepresentation(UuidRepresentation.STANDARD)
+        .applyConnectionString(connectionString).build()
+
+    val db: MongoDatabase by lazy {
+        KMongoJacksonFeature.setUUIDRepresentation(UuidRepresentation.STANDARD)
+        UpdateConfiguration.updateOnlyNotNullProperties
+
+        KMongo.createClient(settings).getDatabase("strax_data")
     }
 }
 
+fun main() {
+    val userID = UUID.fromString("78218344-5800-456e-800f-19b1d62769e1")
+
+    val nickStore = NicknameStorage(userID)
+
+    println("nick : ${nickStore.moduleData}")
+
+    nickStore.update("<blue>Safety<yellow>Human")
+
+    println("nick : ${nickStore.moduleData}")
+
+    nickStore.update("<red>Safety<green>Human")
+
+    println("nick : ${nickStore.moduleData}")
+
+}
+
+
+
+
+class StraxStorageException(msg: String) : MongoException(msg)
+
+
+//USER : drzodd
+//PASS: HHx3kt7hgX2WeM5
 

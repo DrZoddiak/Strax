@@ -17,7 +17,8 @@ class StraxDefaultFormatter(subject: Subject) : StraxFormatter(subject) {
     ): Optional<Component> {
 
         val name = if (player.customName().isPresent) {
-            Component.text(configPrefix + player.customName().get())
+            mm.deserialize(configPrefix)
+                .append(player.customName().get().get())
         } else {
             player.displayName().get()
         }

@@ -18,7 +18,6 @@ repositories {
     mavenCentral()
 }
 
-val exposedVersion: String = "0.40.1"
 val adventureVersion: String = "4.12.0"
 
 dependencies {
@@ -38,10 +37,8 @@ dependencies {
     implementation("org.spongepowered:configurate-extra-kotlin:4.1.2")
 
     //Storage
-    implementation("com.h2database:h2:2.1.214")
-    implementation("org.jetbrains.exposed:exposed-core:$exposedVersion")
-    implementation("org.jetbrains.exposed:exposed-dao:$exposedVersion")
-    implementation("org.jetbrains.exposed:exposed-jdbc:$exposedVersion")
+    implementation("org.mongodb:mongodb-driver-sync:4.8.1")
+    implementation("org.litote.kmongo:kmongo:4.8.0")
 
     //tests
     testImplementation(kotlin("test"))

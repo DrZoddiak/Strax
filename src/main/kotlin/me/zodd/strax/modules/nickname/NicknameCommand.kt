@@ -1,10 +1,11 @@
 package me.zodd.strax.modules.nickname
 
 import com.google.auto.service.AutoService
+import me.zodd.strax.core.StraxDeserializer
 import me.zodd.strax.core.commands.AbstractStraxCommand
 import me.zodd.strax.core.commands.StraxCommand
 import me.zodd.strax.core.service.StraxCommandService
-import me.zodd.strax.core.storage.NicknameDatabase
+import me.zodd.strax.modules.core.UserStorage
 import net.kyori.adventure.audience.Audience
 import net.kyori.adventure.text.Component
 import org.spongepowered.api.Sponge
@@ -19,6 +20,8 @@ import kotlin.jvm.optionals.getOrNull
 
 @AutoService(StraxCommandService::class)
 class NicknameCommand : AbstractStraxCommand() {
+
+    private val deserializer = StraxDeserializer
 
     private val nicknameConfig = config.modules.nicknameConfig
 
@@ -35,12 +38,12 @@ class NicknameCommand : AbstractStraxCommand() {
                 return@executor CommandResult.error(Component.text("Invalid nickname"))
             }
 
-            val targetPlayer = targetPlayer(ctx) ?: return@executor CommandResult.error(
+            val targetPlayer = cmd.targetPlayerOrRoot(ctx) ?: return@executor CommandResult.error(
                 Component.text("Command must be run by a player or target another player!")
             )
 
-            NicknameStorage(targetPlayer.uniqueId()).updateNick(nickname)
-            targetPlayer.offer(Keys.CUSTOM_NAME, minimessage.deserialize(nickname))
+            NicknameStorage(targetPlayer.uniqueId()).update(nickname)
+            targetPlayer.offer(Keys.CUSTOM_NAME, deserializer.minimessage.deserialize(nickname))
 
             CommandResult.success()
         }
@@ -54,11 +57,11 @@ class NicknameCommand : AbstractStraxCommand() {
         )
         executor { ctx ->
 
-            val targetPlayer = targetPlayer(ctx) ?: return@executor CommandResult.error(
+            val targetPlayer = cmd.targetPlayerOrRoot(ctx) ?: return@executor CommandResult.error(
                 Component.text("Command must be run by a player or target another player!")
             )
 
-            NicknameStorage(targetPlayer.uniqueId()).updateNick("")
+            NicknameStorage(targetPlayer.uniqueId()).update("")
             targetPlayer.remove(Keys.CUSTOM_NAME)
 
             CommandResult.success()
@@ -77,32 +80,19 @@ class NicknameCommand : AbstractStraxCommand() {
 
             val msg = ctx.requireOne(CommonParameters.MESSAGE)
 
-            val uuid = NicknameDatabase.Nickname.find {
-                NicknameDatabase.Nicknames.literalNickname eq msg
-            }.firstOrNull()?.user?.first()?.userId
-
-            val player = Sponge.server().player(uuid).getOrNull()
-
-            val name = player?.name() ?: return@executor CommandResult.error(
+            val uuid = UserStorage().findByNickname(msg)?.id ?: return@executor CommandResult.error(
                 Component.text("No player by that name was found!")
             )
 
-            root.sendMessage(Component.text("The players real name is $name"))
+            //TODO: Allow offline-user lookup for usernames
+
+            val player = Sponge.server().player(uuid).getOrNull() ?: return@executor CommandResult.error(
+                Component.text("No player online by that name was found!")
+            )
+
+            root.sendMessage(Component.text("The players real name is ${player.name()}"))
 
             CommandResult.success()
-        }
-    }
-
-    private fun targetPlayer(ctx: CommandContext): ServerPlayer? {
-        val root = ctx.cause().root() as Subject
-        return if (root.hasPermission(NicknamePermissions.nickTargetOthers) && ctx.hasAny(CommonParameters.PLAYER_OPTIONAL)) {
-            ctx.requireOne(CommonParameters.PLAYER_OPTIONAL)
-        } else {
-            if (ctx.cause().root() is ServerPlayer) {
-                ctx.cause().root() as ServerPlayer
-            } else {
-                null
-            }
         }
     }
 
