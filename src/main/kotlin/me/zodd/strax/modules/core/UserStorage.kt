@@ -3,7 +3,6 @@ package me.zodd.strax.modules.core
 import me.zodd.strax.core.storage.AbstractStorageObject
 import me.zodd.strax.core.storage.StorageSerializable
 import me.zodd.strax.core.storage.StraxStorageException
-import me.zodd.strax.modules.ignore.Ignore
 import me.zodd.strax.modules.nickname.Nickname
 import org.litote.kmongo.eq
 import java.util.*
@@ -33,6 +32,5 @@ class UserStorage : AbstractStorageObject() {
 data class User(
     val id: UUID,
     val nickname: Nickname = Nickname(),
-    val ignoreList: Ignore = Ignore(),
 ) : StorageSerializable
 
