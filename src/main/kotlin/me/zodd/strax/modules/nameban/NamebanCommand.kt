@@ -12,27 +12,24 @@ import org.spongepowered.api.command.parameter.CommonParameters
 @AutoService(StraxCommandService::class)
 class NamebanCommand : AbstractStraxCommand() {
     val storage = NamebanStorage()
+    private val namebanConfig = config.modules.namebanConfig
 
     private val nameban = StraxCommand("nameban").builder { cmd ->
         shortDescription(Component.text("Bans a username from joining the server"))
         addParameters(
-            CommonParameters.MESSAGE, CommonCommandParameters.optionalMessage
+            CommonCommandParameters.nameParameter, CommonCommandParameters.optionalMessage
         )
         executor { ctx ->
 
-            val msg = ctx.requireOne(CommonParameters.MESSAGE)
+            val name = ctx.requireOne(CommonCommandParameters.nameParameter)
 
-            val reason =
-                if (ctx.hasAny(CommonCommandParameters.optionalMessage))
-                    ctx.requireOne(CommonCommandParameters.optionalMessage)
-                else {
-                    null
-                }
+            val reason = if (ctx.hasAny(CommonCommandParameters.optionalMessage)) {
+                ctx.requireOne(CommonCommandParameters.optionalMessage)
+            } else {
+                namebanConfig.reason
+            }
 
-            if (reason == null)
-                storage.addEntry(msg)
-            else
-                storage.addEntry(msg, reason)
+            storage.addEntry(name, reason)
 
             CommandResult.success()
         }

@@ -16,8 +16,7 @@ class NamebanListener : StraxListenerService() {
         val name = player.name()
         val namebanStorage = NamebanStorage()
 
-        val reason = namebanStorage.getEntry(name)?.nameReasonMap?.second ?: return
-
+        val reason = namebanStorage.getEntry(name)?.second ?: config.modules.namebanConfig.reason
         player.kick(Component.text(reason))
     }
 }

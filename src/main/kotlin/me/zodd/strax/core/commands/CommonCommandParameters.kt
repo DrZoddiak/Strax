@@ -13,6 +13,7 @@ object CommonCommandParameters {
 
     val uuidParameter = Parameter.uuid().key("uuid").build()
     val userParameter = Parameter.user().key("user").build()
+    val nameParameter = Parameter.string().key("name").build()
 
     val userOrUuid = Parameter
         .firstOfBuilder(userParameter)
@@ -25,7 +26,8 @@ object CommonCommandParameters {
         .or(uuidParameter)
         .build()
 
-    fun uuidFromUserOrUuid(ctx : CommandContext) : UUID {
+
+    fun uuidFromUserOrUuid(ctx: CommandContext): UUID {
         return if (ctx.hasAny(userParameter)) {
             ctx.requireOne(userParameter)
         } else {
