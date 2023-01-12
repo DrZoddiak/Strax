@@ -4,6 +4,7 @@ import me.zodd.strax.modules.ban.BanConfig
 import me.zodd.strax.modules.chat.ChatConfig
 import me.zodd.strax.modules.connection.ConnectionConfig
 import me.zodd.strax.modules.fly.FlyConfig
+import me.zodd.strax.modules.home.HomeConfig
 import me.zodd.strax.modules.kick.KickConfig
 import me.zodd.strax.modules.nameban.NamebanConfig
 import me.zodd.strax.modules.nickname.NicknameConfig
@@ -24,7 +25,7 @@ data class Modules(
     val nicknameConfig: NicknameConfig = NicknameConfig(),
     val flyConfig: FlyConfig = FlyConfig(),
     val namebanConfig : NamebanConfig = NamebanConfig(),
-
+    val homeConfig : HomeConfig = HomeConfig()
 )
 
 @ConfigSerializable

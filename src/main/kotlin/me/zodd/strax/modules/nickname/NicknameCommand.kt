@@ -10,11 +10,8 @@ import net.kyori.adventure.audience.Audience
 import net.kyori.adventure.text.Component
 import org.spongepowered.api.Sponge
 import org.spongepowered.api.command.CommandResult
-import org.spongepowered.api.command.parameter.CommandContext
 import org.spongepowered.api.command.parameter.CommonParameters
 import org.spongepowered.api.data.Keys
-import org.spongepowered.api.entity.living.player.server.ServerPlayer
-import org.spongepowered.api.service.permission.Subject
 import java.util.*
 import kotlin.jvm.optionals.getOrNull
 
@@ -42,7 +39,7 @@ class NicknameCommand : AbstractStraxCommand() {
                 Component.text("Command must be run by a player or target another player!")
             )
 
-            NicknameStorage(targetPlayer.uniqueId()).update(nickname)
+            NicknameStorage(targetPlayer.uniqueId()).updateNickname(nickname)
             targetPlayer.offer(Keys.CUSTOM_NAME, deserializer.minimessage.deserialize(nickname))
 
             CommandResult.success()
@@ -61,7 +58,7 @@ class NicknameCommand : AbstractStraxCommand() {
                 Component.text("Command must be run by a player or target another player!")
             )
 
-            NicknameStorage(targetPlayer.uniqueId()).update("")
+            NicknameStorage(targetPlayer.uniqueId()).updateNickname("")
             targetPlayer.remove(Keys.CUSTOM_NAME)
 
             CommandResult.success()

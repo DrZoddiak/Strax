@@ -1,22 +1,26 @@
 package me.zodd.strax.modules.nickname
 
-import me.zodd.strax.core.storage.AbstractModuleStorage
-import me.zodd.strax.core.storage.StorageSerializable
+import me.zodd.strax.core.storage.AbstractUserModuleStorage
 import net.kyori.adventure.text.minimessage.MiniMessage
+import org.litote.kmongo.setValue
 import java.util.UUID
 
-class NicknameStorage(id: UUID) : AbstractModuleStorage<Nickname>(id) {
+class NicknameStorage(id: UUID) : AbstractUserModuleStorage(id) {
 
-    override val moduleData get() = getUserData().nickname
-    fun update(nickname: String) = update(Nickname(nickname))
-
-    override fun update(data: Nickname) {
-        val copy = getUserData().copy(nickname = data)
-        updateData(copy)
+    fun updateNickname(nickname: String) {
+        user.updateOne(
+            userFilter,
+            setValue(Nickname::formattedName, nickname)
+        )
     }
+
+    fun getNickname(): Nickname {
+        return getUserData().nickname
+    }
+
 }
 
-data class Nickname(val formattedName: String = "") : StorageSerializable {
+data class Nickname(val formattedName: String = "") {
     val literalName = MiniMessage.miniMessage().stripTags(formattedName)
 
     override fun toString(): String {

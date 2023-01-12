@@ -17,5 +17,9 @@ object PermissionOptions {
         }
     }
 
+    object Home {
+        val limit = "home-limit"
+    }
+
     fun Subject.optionOrEmpty(key: String): String = option(key).orElse("")
 }

@@ -1,16 +1,16 @@
 package me.zodd.strax.modules.core
 
 import me.zodd.strax.core.storage.AbstractStorageObject
-import me.zodd.strax.core.storage.StorageSerializable
 import me.zodd.strax.core.storage.StraxStorageException
+import me.zodd.strax.modules.home.Homes
+import me.zodd.strax.modules.home.PlayerHome
 import me.zodd.strax.modules.nickname.Nickname
 import org.litote.kmongo.eq
 import java.util.*
 
 class UserStorage : AbstractStorageObject() {
-
     fun findByNickname(name : String): User? {
-        val usr = user.find().firstOrNull() {
+        val usr = user.find().firstOrNull {
             it.nickname.literalName.contentEquals(name,true)
         }
         return usr
@@ -32,5 +32,6 @@ class UserStorage : AbstractStorageObject() {
 data class User(
     val id: UUID,
     val nickname: Nickname = Nickname(),
-) : StorageSerializable
+    val homes : List<PlayerHome> = Homes().homes,
+)
 

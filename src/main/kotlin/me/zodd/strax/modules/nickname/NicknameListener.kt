@@ -16,7 +16,7 @@ class NicknameListener : StraxListenerService() {
 
     @Listener
     fun playerJoinEvent(event: ServerSideConnectionEvent.Join, @Root player: ServerPlayer) {
-        val nick = NicknameStorage(player.uniqueId()).moduleData.formattedName
+        val nick = NicknameStorage(player.uniqueId()).getNickname().formattedName
 
         if (nick.isBlank()) return
 

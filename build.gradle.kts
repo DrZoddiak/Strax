@@ -44,12 +44,18 @@ dependencies {
     testImplementation(kotlin("test"))
 }
 
+tasks.shadowJar {
+    relocate("org.litote.kmongo","${project.group}.kmongo")
+    relocate("org.mongodb","${project.group}.mongodb")
+    relocate("net.kyori","${project.group}.adventure")
+    relocate("org.jetbrains.kotlin","${project.group}.kotlin")
+}
+
 tasks {
     test {
         useTestNG()
     }
 }
-
 
 sponge {
     apiVersion("8.2.0-SNAPSHOT")
@@ -61,13 +67,13 @@ sponge {
     plugin("strax") {
         displayName("Strax")
         entrypoint("me.zodd.strax.Strax")
-        description("Just testing things...")
+        description("Essentials plugin")
         links {
             homepage("https://spongepowered.org")
             source("https://spongepowered.org/source")
             issues("https://spongepowered.org/issues")
         }
-        contributor("Spongie") {
+        contributor("Zodd") {
             description("Lead Developer")
         }
         dependency("spongeapi") {

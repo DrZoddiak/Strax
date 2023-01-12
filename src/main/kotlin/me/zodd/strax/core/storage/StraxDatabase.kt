@@ -5,7 +5,6 @@ import com.mongodb.MongoClientSettings
 import com.mongodb.MongoException
 import com.mongodb.client.MongoDatabase
 import me.zodd.strax.core.utils.StraxConfigurationReference
-import me.zodd.strax.modules.nickname.NicknameStorage
 import org.bson.UuidRepresentation
 import org.litote.kmongo.*
 import org.litote.kmongo.util.KMongoJacksonFeature
@@ -25,7 +24,8 @@ object StraxStorage {
 
     private val settings = MongoClientSettings.builder()
         .uuidRepresentation(UuidRepresentation.STANDARD)
-        .applyConnectionString(connectionString).build()
+        .applyConnectionString(connectionString)
+        .build()
 
     val db: MongoDatabase by lazy {
         KMongoJacksonFeature.setUUIDRepresentation(UuidRepresentation.STANDARD)

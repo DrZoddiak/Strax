@@ -10,13 +10,14 @@ import org.spongepowered.api.event.network.ServerSideConnectionEvent
 
 @AutoService(StraxListenerService::class)
 class NamebanListener : StraxListenerService() {
+    private val namebanStorage = NamebanStorage()
 
     @Listener
     fun playerJoinEvent(event: ServerSideConnectionEvent.Join, @Getter("player") player: ServerPlayer) {
         val name = player.name()
-        val namebanStorage = NamebanStorage()
 
-        val reason = namebanStorage.getEntry(name)?.second ?: config.modules.namebanConfig.reason
+        //If entry isn't found, we don't kick.
+        val reason = namebanStorage.getEntry(name)?.second ?: return
         player.kick(Component.text(reason))
     }
 }
