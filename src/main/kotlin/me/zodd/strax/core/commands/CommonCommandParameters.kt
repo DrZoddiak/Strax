@@ -14,6 +14,7 @@ object CommonCommandParameters {
     val uuidParameter = Parameter.uuid().key("uuid").build()
     val userParameter = Parameter.user().key("user").build()
     val nameParameter = Parameter.string().key("name").build()
+    val optionalNameParameter = Parameter.string().optional().key("name").build()
 
     val userOrUuid = Parameter
         .firstOfBuilder(userParameter)
