@@ -40,12 +40,14 @@ class Strax @Inject internal constructor(
 
         loadConfig()
 
+        //Initialize Database
+        StraxStorage.db
+
         ServiceLoader.load(StraxListenerService::class.java).forEach {
             Sponge.eventManager().registerListeners(container, it)
         }
 
-        //Initialize Database
-        StraxStorage.db
+
     }
 
     @Listener
