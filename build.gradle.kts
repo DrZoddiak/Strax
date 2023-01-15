@@ -17,10 +17,6 @@ plugins {
 group = "me.zodd"
 version = "0.1.0-SNAPSHOT"
 
-repositories {
-    mavenCentral()
-}
-
 dependencies {
     //annotations
     ksp("dev.zacsweers.autoservice:auto-service-ksp:1.0.0")
@@ -78,9 +74,9 @@ sponge {
         entrypoint("me.zodd.strax.Strax")
         description("Essentials plugin")
         links {
-            homepage("https://spongepowered.org")
-            source("https://spongepowered.org/source")
-            issues("https://spongepowered.org/issues")
+            homepage("https://github.com/DrZoddiak/Strax")
+            source("https://github.com/DrZoddiak/Strax")
+            issues("https://github.com/DrZoddiak/Strax/issues")
         }
         contributor("Zodd") {
             description("Lead Developer")
@@ -90,7 +86,7 @@ sponge {
             optional(false)
         }
         dependency("kruntime") {
-            version("0.1.0")
+            version("0.4.0")
             loadOrder(PluginDependency.LoadOrder.AFTER)
             optional(false)
         }
@@ -165,7 +161,6 @@ class ServiceTransformer : Transformer {
     override fun modifyOutputStream(zos: ZipOutputStream, p1: Boolean) {
 
         serviceEntries.forEach {
-            println("map: ${it.key} | ${it.value}")
             val entry = ZipEntry(it.key)
             entry.time = TransformerContext.getEntryTimestamp(p1, entry.time)
             zos.putNextEntry(entry)

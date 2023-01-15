@@ -9,18 +9,14 @@ import org.bson.UuidRepresentation
 import org.litote.kmongo.*
 import org.litote.kmongo.util.KMongoJacksonFeature
 import org.litote.kmongo.util.UpdateConfiguration
-import java.net.URLEncoder
 
 object StraxStorage {
 
-    private val conf = StraxConfigurationReference.straxConfig.storage
+    private val url = StraxConfigurationReference.straxConfig.storage.mongodbConnection.takeIf {
+        it.isNotBlank()
+    } ?: throw StraxStorageException("Connection String is Blank!")
 
-    private val username = URLEncoder.encode(conf.user, "UTF-8")
-    private val password = URLEncoder.encode(conf.password, "UTF-8")
-    private val url = conf.url
-
-    private val connectionString =
-        ConnectionString("mongodb+srv://$username:$password@$url")
+    private val connectionString = ConnectionString(url)
 
     private val settings = MongoClientSettings.builder()
         .uuidRepresentation(UuidRepresentation.STANDARD)

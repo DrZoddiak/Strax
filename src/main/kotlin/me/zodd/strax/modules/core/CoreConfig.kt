@@ -30,7 +30,5 @@ data class Modules(
 
 @ConfigSerializable
 data class StorageDetails(
-    val url: String = "",
-    val user: String = "",
-    val password: String = "",
+    val mongodbConnection : String = ""
 )
